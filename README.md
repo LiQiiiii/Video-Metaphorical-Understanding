@@ -68,24 +68,6 @@ For example:
 PROJECT_ROOT = "/Users/anonymous/ViMU"
 ```
 
-The scripts expect metadata under:
-
-```text
-metadata/
-```
-
-and videos under:
-
-```text
-videos/
-```
-
-Outputs will be saved to:
-
-```text
-output/
-```
-
 ## Recommended Running Order
 
 For a full evaluation, run:
