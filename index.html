@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ViMU is a benchmark for evaluating whether video understanding models can infer implicit, rhetorical, and social meanings beyond literal video perception.">
+  <meta name="keywords" content="ViMU, Video Metaphorical Understanding, Video Meme Understanding, Multimodal Benchmark, Video Understanding, Implicit Meaning, Rhetoric, Social Signals">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ViMU: Benchmarking Video Metaphorical Understanding</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5f6f86;
+      --soft: #f7f8fb;
+      --line: #e5e7ef;
+      --blue: #2b6cb0;
+      --green: #89e0cd;
+      --red: #efc4cd;
+      --gray: #d0d5d8;
+      --orange: #efd3cc;
+      --purple: #c7aebb;
+    }
+
+    body {
+      font-family: "Google Sans", "Noto Sans", Arial, sans-serif;
+      color: var(--ink);
+      background: #ffffff;
+      line-height: 1.55;
+    }
+
+    a { color: var(--blue); }
+    a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+    .navbar { border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.95); }
+    .navbar-item { font-weight: 600; color: #334155; }
+
+    .publication-header {
+      background: radial-gradient(circle at top left, rgba(137,224,205,0.25), transparent 32%),
+                  radial-gradient(circle at top right, rgba(199,174,187,0.22), transparent 30%),
+                  linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-body { padding: 4.3rem 1.5rem 3.2rem; }
+    .hero-kicker, .section-kicker, .card-kicker {
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: 0.45rem;
+    }
+
+    .publication-title {
+      font-size: clamp(2rem, 4vw, 3.25rem) !important;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      margin-bottom: 1rem !important;
+    }
+
+    .publication-authors { color: #334155; margin-bottom: 0.35rem; }
+    .publication-note { color: var(--muted); margin-top: 0.45rem; }
+    .publication-links { margin-top: 1.5rem; }
+    .link-block { margin: 0.25rem; display: inline-block; }
+    .hf-logo-icon { width: 1.05rem; height: 1.05rem; object-fit: contain; display: block; }
+
+    .section { padding: 3.2rem 1.5rem; }
+    .section-soft { background: var(--soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .section-intro { max-width: 820px; margin: 0 auto 1.6rem; }
+    .section-title { letter-spacing: -0.025em; }
+    .section-copy { color: var(--muted); font-size: 1.05rem; }
+
+    .paper-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 1.35rem;
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+      height: 100%;
+    }
+
+    .abstract-card { padding: 1.7rem; }
+    .abstract-copy { color: #334155; font-size: 1.03rem; }
+
+    .image-frame {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #f1f5f9;
+    }
+    .image-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+    .image-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .image-grid .image-frame {
+      background: #ffffff;
+    }
+    .image-grid-caption {
+      color: #64748b;
+      font-size: 0.82rem;
+      text-align: center;
+      margin-top: 0.35rem;
+    }
+    .figure-caption {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-top: 0.7rem;
+      text-align: center;
+    }
+
+    .metric-box {
+      border-radius: 20px;
+      padding: 1.1rem;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      text-align: center;
+      height: 100%;
+    }
+    .metric-value { font-size: 1.65rem; font-weight: 800; color: #172033; margin-bottom: 0.15rem; }
+    .metric-label { color: #64748b; font-size: 0.92rem; }
+
+    .tag-chip {
+      display: inline-block;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.9rem;
+      margin: 0.18rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    .results-table th, .results-table td { font-size: 0.92rem; vertical-align: middle; }
+    .results-table th { color: #334155; }
+    .best { background: rgba(137,224,205,0.35); font-weight: 700; }
+    .warn { background: rgba(239,196,205,0.32); }
+    .best1 { background: rgba(137,224,205,0.55); font-weight: 800; }
+    .best2 { background: rgba(137,224,205,0.38); font-weight: 700; }
+    .best3 { background: rgba(137,224,205,0.24); font-weight: 700; }
+    .worst1 { background: rgba(199,174,187,0.55); }
+    .worst2 { background: rgba(199,174,187,0.38); }
+    .worst3 { background: rgba(199,174,187,0.24); }
+    .group-row td {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      text-align: center;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .compact-list { margin-left: 1.1rem; color: #334155; }
+    .compact-list li { margin-bottom: 0.35rem; }
+
+    pre {
+      border-radius: 18px;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 1.2rem;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    .footer { background: #f8fafc; border-top: 1px solid var(--line); padding: 2.2rem 1.5rem; color: #64748b; }
+
+    @media screen and (max-width: 768px) {
+      .hero-body { padding-top: 3rem; }
+      .section { padding: 2.3rem 1rem; }
+      .publication-title { font-size: 2rem !important; }
+      .paper-card { padding: 1.05rem; }
+      .image-grid, .image-grid.three { grid-template-columns: 1fr; }
+    }
+.analysis-grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.taxonomy-affinity-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.taxonomy-geometry-row {
+  display: block;
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .analysis-grid-2x2,
+  .taxonomy-affinity-row {
+    grid-template-columns: 1fr;
+  }
+}
+.benchmark-overview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.benchmark-text-block {
+  max-width: 920px;
+}
+
+.benchmark-text-block p {
+  max-width: 860px;
+  color: #334155;
+  font-size: 1.02rem;
+}
+
+.tag-row {
+  margin-top: 0.8rem;
+}
+
+.benchmark-four-figures {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.benchmark-four-figures .image-frame {
+  background: #ffffff;
+}
+
+@media screen and (max-width: 1024px) {
+  .benchmark-four-figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .benchmark-four-figures {
+    grid-template-columns: 1fr;
+  }
+}
+.benchmark-four-figures .image-frame {
+  height: 190px;              /* 四张图统一高度，可按需要改成 180/200/220 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.benchmark-four-figures .image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* 保持比例，不裁剪 */
+  object-position: center;
+}
+.single-column-figures {
+  grid-template-columns: 1fr !important;
+  gap: 1.4rem;
+}
+
+.single-column-figures .image-frame {
+  width: 100%;
+  background: #ffffff;
+}
+
+.single-column-figures .image-frame img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+  </style>
+</head>
+
+<body>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container is-max-desktop">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#"><strong>ViMU</strong></a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navbarMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="#abstract">Abstract</a>
+        <a class="navbar-item" href="#benchmark">Benchmark</a>
+        <a class="navbar-item" href="#tasks">Tasks</a>
+        <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item" href="#analysis">Analysis</a>
+        <a class="navbar-item" href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero publication-header">
+  <div class="hero-body">
+    <div class="container is-max-desktop has-text-centered">
+      <h1 class="title publication-title">ViMU:<br>Benchmarking Video Metaphorical Understanding</h1>
+
+      <div class="is-size-5 publication-authors">
+        <span class="author-block"><a href="#">Qi Li</a></span>
+        <span class="author-block">&nbsp;&nbsp;</span>
+        <span class="author-block"><a href="#">Xinchao Wang</a></span>
+      </div>
+      <div class="is-size-5 publication-authors">National University of Singapore</div>
+      <div class="is-size-6 publication-note">
+        A benchmark for evaluating whether MLLMs understand not only <em>what is shown</em>, but also <em>what is meant</em>.
+      </div>
+
+      <div class="publication-links">
+        <span class="link-block">
+          <a href="#" class="external-link button is-normal is-rounded is-light" target="_blank" rel="noreferrer">
+            <span class="icon"><i class="ai ai-arxiv"></i></span><span>Paper</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="https://github.com/LiQiiiii/Video-Metaphorical-Understanding" class="external-link button is-normal is-rounded is-dark" target="_blank" rel="noreferrer">
+            <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="https://huggingface.co/datasets/LIQIIIII/ViMU" class="external-link button is-normal is-rounded is-light" target="_blank" rel="noreferrer">
+            <span class="icon"><img class="hf-logo-icon" src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="HF"></span><span>Dataset</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="#results" class="external-link button is-normal is-rounded is-light">
+            <span class="icon"><i class="fas fa-chart-line"></i></span><span>Results</span>
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section teaser-section">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Key Idea</p>
+      <h2 class="title is-3 section-title">Video meaning often lives beneath the literal content.</h2>
+      <p class="section-copy">ViMU evaluates whether models can recover rhetorical, social, and culturally grounded subtext from short-form videos without explicit hints.</p>
+    </div>
+    <div class="paper-card">
+      <div class="image-grid single-column-figures">
+        <div>
+          <div class="image-frame"><img src="./assets/vimu_example_1_00.jpg" alt="ViMU example 1: literal content versus subtext"></div>
+        </div>
+        <div>
+          <div class="image-frame"><img src="./assets/vimu_example_2_00.jpg" alt="ViMU example 2: implicit meaning beyond surface video content"></div>
+        </div>
+      </div>
+      <p class="figure-caption">Examples showing the gap between observable content and intended subtext.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="paper-card abstract-card">
+          <p class="section-kicker">Abstract</p>
+          <div class="content has-text-justified abstract-copy">
+            <p>
+              We introduce <strong>ViMU</strong>, a benchmark for <strong>Video Metaphorical Understanding</strong>. ViMU tests whether multimodal models can move beyond literal video description and infer implicit meaning, rhetorical devices, social signals, target subjects, and culturally grounded subtext. The benchmark contains <strong>588 curated videos</strong> and <strong>2,352 questions</strong> across open-ended and multiple-choice tasks. All questions are designed to be <strong>hint-free</strong>, so models must infer the intended meaning from multimodal evidence rather than from leaked answer cues. Experiments on <strong>16 MLLMs</strong> show that current frontier models still struggle with video subtext understanding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft" id="benchmark">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Benchmark</p>
+      <h2 class="title is-3 section-title">A hint-free benchmark for implicit video interpretation.</h2>
+    </div>
+
+    <div class="columns is-multiline is-variable is-4">
+      <div class="column is-3-desktop is-6-tablet"><div class="metric-box"><p class="metric-value">588</p><p class="metric-label">Curated videos</p></div></div>
+      <div class="column is-3-desktop is-6-tablet"><div class="metric-box"><p class="metric-value">2,352</p><p class="metric-label">Questions</p></div></div>
+      <div class="column is-3-desktop is-6-tablet"><div class="metric-box"><p class="metric-value">4</p><p class="metric-label">Evaluation tasks</p></div></div>
+      <div class="column is-3-desktop is-6-tablet"><div class="metric-box"><p class="metric-value">16</p><p class="metric-label">Evaluated MLLMs</p></div></div>
+    </div>
+<div class="paper-card benchmark-overview-card" style="margin-top:1.2rem;">
+  <div class="benchmark-text-block">
+    <p class="card-kicker">Design</p>
+    <h3 class="title is-4">Visible content vs. hidden subtext</h3>
+    <p>
+      ViMU separates literal video content from the intended meaning behind it, covering rhetoric mechanisms,
+      social value signals, evidence sources, and target subjects.
+    </p>
+
+    <div class="tag-row">
+      <span class="tag-chip">Rhetoric Mechanisms</span>
+      <span class="tag-chip">Social value signals</span>
+      <span class="tag-chip">Evidence sources</span>
+      <span class="tag-chip">Target subjects</span>
+    </div>
+  </div>
+
+  <div class="benchmark-four-figures">
+    <div>
+      <div class="image-frame">
+        <img src="./assets/rhetoric_mechanisms_donut_00.jpg" alt="Distribution of rhetoric mechanisms">
+      </div>
+      <p class="image-grid-caption">Rhetoric mechanisms</p>
+    </div>
+
+    <div>
+      <div class="image-frame">
+        <img src="./assets/social_value_signals_donut_00.jpg" alt="Distribution of social value signals">
+      </div>
+      <p class="image-grid-caption">Social value signals</p>
+    </div>
+
+    <div>
+      <div class="image-frame">
+        <img src="./assets/evidence_sources_donut_00.jpg" alt="Distribution of evidence sources">
+      </div>
+      <p class="image-grid-caption">Evidence sources</p>
+    </div>
+
+    <div>
+      <div class="image-frame">
+        <img src="./assets/target_subjects_donut_00.jpg" alt="Distribution of target subjects">
+      </div>
+      <p class="image-grid-caption">Target subjects</p>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+<section class="section" id="tasks">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Tasks</p>
+      <h2 class="title is-3 section-title">Four complementary evaluation tasks.</h2>
+      <p class="section-copy">Each task probes a different aspect of video subtext understanding.</p>
+    </div>
+
+    <div class="columns is-variable is-5">
+      <div class="column"><div class="paper-card"><p class="card-kicker">OE</p><h3 class="title is-5">Open-Ended Interpretation</h3><p>Explain the intended meaning of the video without answer hints.</p></div></div>
+      <div class="column"><div class="paper-card"><p class="card-kicker">EG</p><h3 class="title is-5">Evidence Grounding</h3><p>Select the multimodal cues that support the interpretation.</p></div></div>
+      <div class="column"><div class="paper-card"><p class="card-kicker">RM</p><h3 class="title is-5">Rhetoric Mechanisms</h3><p>Identify how the video constructs implicit meaning.</p></div></div>
+      <div class="column"><div class="paper-card"><p class="card-kicker">SV</p><h3 class="title is-5">Social Value Signals</h3><p>Identify the social stance or value signal conveyed by the video.</p></div></div>
+    </div>
+
+    <div class="paper-card">
+      <div class="image-grid single-column-figures">
+        <div>
+          <div class="image-frame"><img src="./assets/openend_example1_00.jpg" alt="Open-ended interpretation task example"></div>
+          <p class="image-grid-caption">Open-ended interpretation</p>
+        </div>
+        <div>
+          <div class="image-frame"><img src="./assets/evidence_example1_00.jpg" alt="Evidence grounding task example"></div>
+          <p class="image-grid-caption">Evidence grounding</p>
+        </div>
+        <div>
+          <div class="image-frame"><img src="./assets/Rhetoric_Mechanisms_example1_00.jpg" alt="Rhetoric mechanisms task example"></div>
+          <p class="image-grid-caption">Rhetoric mechanisms</p>
+        </div>
+        <div>
+          <div class="image-frame"><img src="./assets/social_value_signals_example1_00.jpg" alt="Social value signals task example"></div>
+          <p class="image-grid-caption">Social value signals</p>
+        </div>
+      </div>
+      <p class="figure-caption">Open-ended interpretation, evidence grounding, rhetoric classification, and social-value classification.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft" id="results">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Results</p>
+      <h2 class="title is-3 section-title">Frontier models remain far from robust video subtext understanding.</h2>
+      <p class="section-copy">Even strong models often describe the video correctly but miss its rhetorical or social meaning.</p>
+    </div>
+
+    <div class="paper-card">
+      <div class="table-container">
+        <table class="table is-fullwidth is-hoverable results-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Date</th>
+              <th>OE</th>
+              <th>EG</th>
+              <th>RM</th>
+              <th>SV</th>
+              <th>SSU-Avg</th>
+              <th>All-Avg</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="group-row"><td colspan="8"><em>Open-weight Models</em></td></tr>
+            <tr>
+              <td>Ministral-8B</td>
+              <td>2024-10</td>
+              <td class="worst2">48.25</td>
+              <td>48.60</td>
+              <td>31.87</td>
+              <td>10.45</td>
+              <td>21.16</td>
+              <td>34.79</td>
+            </tr>
+            <tr>
+              <td>Ministral-14B</td>
+              <td>2025-12</td>
+              <td>52.19</td>
+              <td>55.73</td>
+              <td>27.29</td>
+              <td class="worst2">6.57</td>
+              <td>16.93</td>
+              <td>35.45</td>
+            </tr>
+            <tr>
+              <td>Gemma-3-4B-it</td>
+              <td>2025-03</td>
+              <td class="worst1">39.43</td>
+              <td class="worst3">25.41</td>
+              <td>21.10</td>
+              <td class="worst3">7.17</td>
+              <td>14.13</td>
+              <td class="worst3">23.28</td>
+            </tr>
+            <tr>
+              <td>Gemma-3-27B-it</td>
+              <td>2025-03</td>
+              <td>55.90</td>
+              <td>49.38</td>
+              <td>32.47</td>
+              <td>7.95</td>
+              <td>20.21</td>
+              <td>36.43</td>
+            </tr>
+            <tr>
+              <td>Qwen3-VL-32B-Instruct</td>
+              <td>2025-10</td>
+              <td>64.09</td>
+              <td>59.64</td>
+              <td>27.65</td>
+              <td>15.17</td>
+              <td>21.41</td>
+              <td>41.64</td>
+            </tr>
+            <tr>
+              <td>Qwen3.5-27B</td>
+              <td>2026-02</td>
+              <td>62.80</td>
+              <td>60.28</td>
+              <td class="best1">38.18</td>
+              <td>22.40</td>
+              <td>30.29</td>
+              <td class="best3">45.91</td>
+            </tr>
+
+            <tr class="group-row"><td colspan="8"><em>Closed-source / API Models</em></td></tr>
+            <tr>
+              <td>Claude-3-Haiku</td>
+              <td>2024-03</td>
+              <td>50.41</td>
+              <td>34.55</td>
+              <td class="worst2">2.99</td>
+              <td class="worst1">3.64</td>
+              <td class="worst1">3.32</td>
+              <td class="worst2">22.90</td>
+            </tr>
+            <tr>
+              <td>GLM-4.5v</td>
+              <td>2025-08</td>
+              <td>62.52</td>
+              <td class="worst2">23.11</td>
+              <td>8.87</td>
+              <td>9.26</td>
+              <td>9.06</td>
+              <td>25.94</td>
+            </tr>
+            <tr>
+              <td>Grok-4.1-Fast</td>
+              <td>2025-09</td>
+              <td>57.62</td>
+              <td>63.84</td>
+              <td class="best2">34.91</td>
+              <td class="best2">28.73</td>
+              <td class="best1">31.82</td>
+              <td class="best2">46.28</td>
+            </tr>
+            <tr>
+              <td>Gemini-3-Flash-Preview</td>
+              <td>2025-12</td>
+              <td>62.54</td>
+              <td>52.80</td>
+              <td class="best3">33.63</td>
+              <td class="best3">28.26</td>
+              <td class="best3">30.94</td>
+              <td>44.31</td>
+            </tr>
+            <tr>
+              <td>Mimo-V2-Omni</td>
+              <td>2026-03</td>
+              <td>64.07</td>
+              <td>48.94</td>
+              <td>21.04</td>
+              <td>18.52</td>
+              <td>19.78</td>
+              <td>38.14</td>
+            </tr>
+            <tr>
+              <td>Seed-2.0-Lite</td>
+              <td>2026-03</td>
+              <td>60.84</td>
+              <td class="best2">66.16</td>
+              <td>18.75</td>
+              <td>16.73</td>
+              <td>17.74</td>
+              <td>40.62</td>
+            </tr>
+            <tr>
+              <td>o4-mini</td>
+              <td>2025-04</td>
+              <td class="best3">65.27</td>
+              <td>59.63</td>
+              <td>33.21</td>
+              <td class="best1">29.51</td>
+              <td class="best2">31.36</td>
+              <td class="best1">46.91</td>
+            </tr>
+            <tr>
+              <td>GPT-4.1-nano</td>
+              <td>2025-04</td>
+              <td class="worst3">50.12</td>
+              <td class="worst1">22.31</td>
+              <td class="worst1">2.32</td>
+              <td>9.02</td>
+              <td class="worst2">5.67</td>
+              <td class="worst1">20.94</td>
+            </tr>
+            <tr>
+              <td>GPT-5.2</td>
+              <td>2025-12</td>
+              <td class="best1">73.15</td>
+              <td class="best1">67.83</td>
+              <td>16.55</td>
+              <td>21.15</td>
+              <td>18.85</td>
+              <td>44.67</td>
+            </tr>
+            <tr>
+              <td>GPT-5.4-mini</td>
+              <td>2026-03</td>
+              <td class="best2">66.19</td>
+              <td class="best3">64.45</td>
+              <td class="worst3">4.17</td>
+              <td>11.77</td>
+              <td class="worst3">7.97</td>
+              <td>36.64</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="figure-caption">
+        Main results on ViMU. OE: open-ended interpretation; EG: evidence grounding; RM: rhetoric mechanisms; SV: social value signals.
+        SSU-Avg averages RM and SV; All-Avg averages all four tasks. Green cells mark top-3 scores, and purple cells mark bottom-3 scores.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="analysis">
+  <div class="container is-max-desktop">
+    <div class="section-intro has-text-centered">
+      <p class="section-kicker">Analysis</p>
+      <h2 class="title is-3 section-title">What ViMU reveals.</h2>
+    </div>
+
+    <div class="columns is-variable is-5">
+      <div class="column">
+        <div class="paper-card">
+          <p class="card-kicker">Finding 1</p>
+          <h3 class="title is-5">Surface perception is not enough.</h3>
+          <p>Models that perform well on open-ended description can still fail on rhetoric and social-signal classification.</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="paper-card">
+          <p class="card-kicker">Finding 2</p>
+          <h3 class="title is-5">Evidence is often incomplete.</h3>
+          <p>Many grounding errors come from missing necessary evidence rather than over-selecting irrelevant cues.</p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="paper-card">
+          <p class="card-kicker">Finding 3</p>
+          <h3 class="title is-5">Models have systematic biases.</h3>
+          <p>They tend to prefer generic or safer categories and under-predict more implicit or socially coded meanings.</p>
+        </div>
+      </div>
+    </div>
+
+<div class="stacked-analysis" style="margin-top:0.4rem;">
+  <div class="stacked-analysis-item">
+    <div class="paper-card">
+      <div class="analysis-grid-2x2">
+        <div>
+          <div class="image-frame">
+            <img src="./assets/fig2_conservatism_performance_map_v3_final_00.jpg" alt="Evidence conservatism and performance map">
+          </div>
+          <p class="image-grid-caption">Conservatism vs. performance</p>
+        </div>
+
+        <div>
+          <div class="image-frame">
+            <img src="./assets/fig4_error_taxonomy_stacked_bar_v2_final_00.jpg" alt="Evidence grounding error composition">
+          </div>
+          <p class="image-grid-caption">Error composition</p>
+        </div>
+
+        <div>
+          <div class="image-frame">
+            <img src="./assets/fig5_pairwise_relation_distortion_overall_final_00.jpg" alt="Pairwise evidence relation distortion">
+          </div>
+          <p class="image-grid-caption">Relation distortion</p>
+        </div>
+
+        <div>
+          <div class="image-frame">
+            <img src="./assets/fig3_model_similarity_pca_final_00.jpg" alt="Model similarity PCA based on taxonomy error signatures">
+          </div>
+          <p class="image-grid-caption">Model similarity</p>
+        </div>
+      </div>
+
+      <p class="figure-caption">
+        Evidence grounding behavior and model-level error similarity.
+      </p>
+    </div>
+  </div>
+
+  <div class="stacked-analysis-item">
+    <div class="paper-card">
+      <div class="taxonomy-affinity-row">
+        <div>
+          <div class="image-frame">
+            <img src="./assets/fig5a_rhetoric_affinity_wo_guidance_00.jpg" alt="Rhetoric mechanism option-affinity bias">
+          </div>
+          <p class="image-grid-caption">Rhetoric affinity</p>
+        </div>
+
+        <div>
+          <div class="image-frame">
+            <img src="./assets/fig5c_social_affinity_wo_guidance_00.jpg" alt="Social value signal option-affinity bias">
+          </div>
+          <p class="image-grid-caption">Social-value affinity</p>
+        </div>
+      </div>
+
+      <div class="taxonomy-geometry-row">
+        <div class="image-frame">
+          <img src="./assets/fig4d_geometry_bar_final_00.jpg" alt="Average taxonomy geometry distortion across models">
+        </div>
+        <p class="image-grid-caption">Taxonomy geometry</p>
+      </div>
+
+      <p class="figure-caption">
+        Option-affinity bias and taxonomy-geometry distortion.
+      </p>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop content">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title has-text-centered">BibTeX</h2>
+<pre><code>@misc{li2026vimu,
+  title  = {ViMU: Benchmarking Video Metaphorical Understanding},
+  author = {Li, Qi and Wang, Xinchao},
+  year   = {2026},
+  note   = {Project page}
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container has-text-centered">
+    <p><strong>ViMU</strong>: Benchmarking Video Metaphorical Understanding</p>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const burgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    burgers.forEach(el => {
+      el.addEventListener('click', () => {
+        const target = el.dataset.target;
+        const menu = document.getElementById(target);
+        el.classList.toggle('is-active');
+        menu.classList.toggle('is-active');
+      });
+    });
+  });
+</script>
+</body>
+</html>
