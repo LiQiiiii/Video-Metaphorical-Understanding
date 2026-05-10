@@ -2,6 +2,11 @@
 
 # ViMU: Benchmarking Video Metaphorical Understanding
 
+[![Project Page](https://img.shields.io/badge/Project-Page-blue?style=for-the-badge&logo=googlechrome&logoColor=white)](https://liqiiiii.github.io/Video-Metaphorical-Understanding/)
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/xxxx.xxxxx)
+[![Hugging Face](https://img.shields.io/badge/HuggingFace-Dataset-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/datasets/LIQIIIII/ViMU)
+
+
 [Qi Li](https://liqiiiii.github.io/), [Xinchao Wang](https://sites.google.com/site/sitexinchaowang/)
 
 [xML Lab](https://sites.google.com/view/xml-nus), National University of Singapore
