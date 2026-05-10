@@ -1,4 +1,12 @@
+<div align="center">
+
 # ViMU: Benchmarking Video Metaphorical Understanding
+
+[Qi Li](https://liqiiiii.github.io/), [Xinchao Wang](https://sites.google.com/site/sitexinchaowang/)
+
+[xML Lab](https://sites.google.com/view/xml-nus), National University of Singapore
+
+</div>
 
 This repository contains the evaluation scripts for ViMU, a benchmark for video metaphorical understanding. The code evaluates multimodal models on four tasks:
 
