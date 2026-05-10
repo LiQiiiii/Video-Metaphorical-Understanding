@@ -188,11 +188,21 @@
     }
 .analysis-grid-2x2 {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   align-items: start;
 }
+@media screen and (max-width: 1024px) {
+  .analysis-grid-2x2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
+@media screen and (max-width: 640px) {
+  .analysis-grid-2x2 {
+    grid-template-columns: 1fr;
+  }
+}
 .taxonomy-affinity-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -283,6 +293,24 @@
   height: auto;
   object-fit: contain;
 }
+.taxonomy-geometry-small {
+  max-width: 620px;
+  margin: 0 auto;
+}
+.analysis-grid-2x2 .image-frame {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.analysis-grid-2x2 .image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
   </style>
 </head>
 
@@ -313,19 +341,23 @@
     <div class="container is-max-desktop has-text-centered">
       <h1 class="title publication-title">ViMU:<br>Benchmarking Video Metaphorical Understanding</h1>
 
-<div class="is-size-5 publication-authors">
-  <span class="author-block">
-    <a href="https://liqiiiii.github.io/" target="_blank" rel="noreferrer">Qi Li</a>
-  </span>
-  <span class="author-block">&nbsp;&nbsp;</span>
-  <span class="author-block">
-    <a href="https://sites.google.com/site/sitexinchaowang/" target="_blank" rel="noreferrer">Xinchao Wang</a>
-  </span>
-</div>
       <div class="is-size-5 publication-authors">
-  <a href="https://sites.google.com/view/xml-nus" target="_blank" rel="noreferrer">xML Lab</a>,
-  National University of Singapore
-</div>
+        <span class="author-block">
+          <a href="https://liqiiiii.github.io/" target="_blank" rel="noreferrer">Qi Li</a>
+        </span>
+        <span class="author-block">&nbsp;&nbsp;</span>
+        <span class="author-block">
+          <a href="https://sites.google.com/site/sitexinchaowang/" target="_blank" rel="noreferrer">Xinchao Wang</a><sup>*</sup>
+        </span>
+      </div>
+            <div class="is-size-6 publication-note">
+        <sup>*</sup>Corresponding author
+      </div>
+      <div class="is-size-5 publication-authors">
+        <a href="https://sites.google.com/view/xml-nus" target="_blank" rel="noreferrer">xML Lab</a>,
+        National University of Singapore
+      </div>
+
       <div class="is-size-6 publication-note">
         A benchmark for evaluating whether MLLMs understand not only <em>what is shown</em>, but also <em>what is meant</em>.
       </div>
@@ -782,12 +814,12 @@
         </div>
       </div>
 
-      <div class="taxonomy-geometry-row">
-        <div class="image-frame">
-          <img src="./assets/fig4d_geometry_bar_final_00.jpg" alt="Average taxonomy geometry distortion across models">
-        </div>
-        <p class="image-grid-caption">Taxonomy geometry</p>
-      </div>
+<div class="taxonomy-geometry-row taxonomy-geometry-small">
+  <div class="image-frame">
+    <img src="./assets/fig4d_geometry_bar_final_00.jpg" alt="Average taxonomy geometry distortion across models">
+  </div>
+  <p class="image-grid-caption">Taxonomy geometry</p>
+</div>
 
       <p class="figure-caption">
         Option-affinity bias and taxonomy-geometry distortion.
