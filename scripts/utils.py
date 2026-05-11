@@ -4,7 +4,7 @@ import time
 import base64
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
+ 
 from openai import OpenAI
 
 api_key = os.environ.get("OPENAI_API_KEY")
