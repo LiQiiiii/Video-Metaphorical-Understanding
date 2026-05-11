@@ -7,7 +7,9 @@
 [![Hugging Face](https://img.shields.io/badge/HuggingFace-Dataset-yellow?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/datasets/LIQIIIII/ViMU)
 
 
-[Qi Li](https://liqiiiii.github.io/), [Xinchao Wang](https://sites.google.com/site/sitexinchaowang/)
+[Qi Li](https://liqiiiii.github.io/), [Xinchao Wang](https://sites.google.com/site/sitexinchaowang/)<sup>*</sup>
+
+<sup>*</sup>Corresponding author
 
 [xML Lab](https://sites.google.com/view/xml-nus), National University of Singapore
 
