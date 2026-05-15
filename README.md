@@ -77,12 +77,6 @@ Before running, edit each script and set:
 PROJECT_ROOT = "/Your/Path/To/ViMU"
 ```
 
-For example:
-
-```python
-PROJECT_ROOT = "/Users/anonymous/ViMU"
-```
-
 ## Recommended Running Order
 
 For a full evaluation, run:
