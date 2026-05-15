@@ -157,3 +157,16 @@ Evidence grounding is scored as a multi-label prediction problem. If the predict
 
 The dataset contains socially sensitive video memes. The benchmark is intended for research use only.
 
+## Citation
+
+If you finding our work interesting or helpful to you, please cite as follows:
+
+```
+@article{li2026vimu,
+  title={ViMU: Benchmarking Video Metaphorical Understanding},
+  author={Li, Qi and Wang, Xinchao},
+  journal={arXiv preprint arXiv:2605.14607},
+  year={2026}
+}
+```
+
