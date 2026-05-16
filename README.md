@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/overall.png" width="100%"/>
+
 # ViMU: Benchmarking Video Metaphorical Understanding
 
 [![Project Page](https://img.shields.io/badge/Project-Page-blue?style=for-the-badge&logo=googlechrome&logoColor=white)](https://liqiiiii.github.io/Video-Metaphorical-Understanding/)
