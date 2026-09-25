@@ -161,7 +161,7 @@ If you finding our work interesting or helpful to you, please cite as follows:
 @article{li2026vimu,
   title={ViMU: Benchmarking Video Metaphorical Understanding},
   author={Li, Qi and Wang, Xinchao},
-  journal={arXiv preprint arXiv:2605.14607},
+  journal={Advances in Neural Information Processing Systems},
   year={2026}
 }
 ```
